@@ -1,0 +1,25 @@
+version: '3.8'
+services:
+  database:
+    image: mariadb:latest
+    container_name: my-mariadb
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: testdb
+    ports:
+      - "3306:3306" # ถ้า 3306 ในเครื่องยังติด XAMPP ให้เปลี่ยนเป็น "3307:3306"
+    volumes:
+      - ./db_data:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin
+    container_name: my-pma
+    restart: always
+    environment:
+      PMA_HOST: database
+      PMA_PORT: 3306
+    ports:
+      - "8080:80"
+    depends_on:
+      - database
