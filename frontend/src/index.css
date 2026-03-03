@@ -1,0 +1,17 @@
+@import "tailwindcss";
+
+@theme {
+  --font-family-sans: "Inter", "Sarabun", sans-serif;
+  --color-primary: #10b981;
+  /* emerald-500 */
+}
+
+@layer base {
+  body {
+    background-color: #f8fafc;
+    /* slate-50 */
+    color: #0f172a;
+    /* slate-900 */
+    font-family: var(--font-family-sans);
+  }
+}
