@@ -87,6 +87,51 @@ router.get('/orders', async (req, res) => {
     }
 });
 
+// 4.5 Get completed order history
+router.get('/orders/history', async (req, res) => {
+    try {
+        const query = `
+            SELECT o.ID_ออเดอร์, o.คิวที่, o.วันที่เวลา_สั่ง, o.สถานะออเดอร์, o.เวลาที่เริ่มทำ, o.เวลาที่เสร็จสิ้น,
+                   d.ID_รายละเอียด, d.จำนวน, d.หมายเหตุ_คำสั่งพิเศษ, m.ชื่อเมนู, m.ID_เมนู
+            FROM รายการสั่งซื้อ_Order o
+            JOIN รายละเอียดออเดอร์ d ON o.ID_ออเดอร์ = d.ID_ออเดอร์
+            JOIN รายการเมนู m ON d.ID_เมนู = m.ID_เมนู
+            WHERE o.สถานะออเดอร์ = 'เสร็จสิ้น'
+            ORDER BY o.เวลาที่เสร็จสิ้น DESC
+            LIMIT 50
+        `;
+        const [rows] = await db.query(query);
+
+        // Group details by order
+        const ordersMap = new Map();
+        rows.forEach(row => {
+            if (!ordersMap.has(row.ID_ออเดอร์)) {
+                ordersMap.set(row.ID_ออเดอร์, {
+                    ID_ออเดอร์: row.ID_ออเดอร์,
+                    คิวที่: row.คิวที่,
+                    วันที่เวลา_สั่ง: row.วันที่เวลา_สั่ง,
+                    สถานะออเดอร์: row.สถานะออเดอร์,
+                    เวลาที่เริ่มทำ: row.เวลาที่เริ่มทำ,
+                    เวลาที่เสร็จสิ้น: row.เวลาที่เสร็จสิ้น,
+                    items: []
+                });
+            }
+            ordersMap.get(row.ID_ออเดอร์).items.push({
+                ID_รายละเอียด: row.ID_รายละเอียด,
+                ID_เมนู: row.ID_เมนู,
+                ชื่อเมนู: row.ชื่อเมนู,
+                จำนวน: row.จำนวน,
+                หมายเหตุ_คำสั่งพิเศษ: row.หมายเหตุ_คำสั่งพิเศษ
+            });
+        });
+
+        res.json(Array.from(ordersMap.values()));
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
 // 5. Create a new order (from Cashier)
 router.post('/orders', async (req, res) => {
     const { คิวที่, items } = req.body;

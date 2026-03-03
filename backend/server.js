@@ -21,7 +21,11 @@ app.get('/', (req, res) => {
 
 // Import API routes
 const apiRoutes = require('./routes/api');
+const analyticsRoutes = require('./routes/analytics');
+const adminRoutes = require('./routes/admin');
 app.use('/api', apiRoutes);
+app.use('/api/analytics', analyticsRoutes);
+app.use('/api/admin', adminRoutes);
 
 // Start server
 app.listen(PORT, () => {
