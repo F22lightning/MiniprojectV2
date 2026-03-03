@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Plus, Minus, Trash2, Send, Utensils } from 'lucide-react';
+import { Plus, Minus, Trash2, Send, Utensils, ShoppingCart } from 'lucide-react';
 import { fetchMenus, createOrder } from '../api';
 
 export default function POSPage() {
