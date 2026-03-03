@@ -46,20 +46,18 @@ function Navigation() {
 
 function App() {
   return (
-    <Router>
-      <div className="min-h-screen bg-slate-50 flex flex-col font-sans">
-        <Navigation />
-        <main className="flex-1 overflow-hidden p-4 md:p-6">
-          <Routes>
-            <Route path="/" element={<KDSPage />} />
-            <Route path="/pos" element={<POSPage />} />
-            <Route path="/admin" element={<AdminPage />} />
-            <Route path="/dashboard" element={<DashboardPage />} />
-            <Route path="/history" element={<HistoryPage />} />
-          </Routes>
-        </main>
-      </div>
-    </Router>
+    <div className="min-h-screen bg-slate-50 flex flex-col font-sans">
+      <Navigation />
+      <main className="flex-1 overflow-hidden p-4 md:p-6">
+        <Routes>
+          <Route path="/" element={<KDSPage />} />
+          <Route path="/pos" element={<POSPage />} />
+          <Route path="/admin" element={<AdminPage />} />
+          <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/history" element={<HistoryPage />} />
+        </Routes>
+      </main>
+    </div>
   );
 }
 
